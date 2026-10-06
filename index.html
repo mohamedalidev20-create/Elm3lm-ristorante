@@ -36,7 +36,7 @@ body.play #hud{display:flex}
 .level small{font-size:11px}
 .level.lock{background:#3b332c;color:#aaa;border-color:#65594e;box-shadow:0 4px #211c18;cursor:default}
 .level.current{outline:3px solid #fff;box-shadow:0 0 24px #ffd44d,0 5px #68400e}
-.level.done:after{content:"✓";position:absolute;top:4px;left:7px;color:#65ef91;font-size:21px}
+.level.done:after{content:"\2713";position:absolute;top:4px;left:7px;color:#65ef91;font-size:21px}
 .badge{position:absolute;right:6px;top:5px;background:#241108;color:#ffd45b;border-radius:9px;padding:2px 5px;font-size:9px}
 .card{width:min(600px,94vw);background:#281306e8;border:2px solid #bd7e27;border-radius:14px;padding:8px 12px;display:flex;align-items:center;gap:12px;margin:3px 0}
 .card .grow{flex:1;text-align:right}
@@ -116,7 +116,7 @@ body.play #hud{display:flex}
 </div>
 
 <div id="rot">
- <div style="font-size:80px">📱↻</div>
+ <div style="font-size:80px">📱\u21bb</div>
  <div>لف الموبايل بالعرض علشان تلعب</div>
 </div>
 
@@ -302,7 +302,7 @@ function finish(winByTime=false){
   "الزبائن اللي مشيوا: <b>"+G.lost+"</b><br>"+
   "معاك دلوقتي: <b>"+S.money+" جنيه</b><br>"+
   "الدقة: <b>"+Math.round(G.served/Math.max(1,G.served+G.wrong+G.lost)*100)+"%</b>"+
-  (win?"<br><b>🔥 المرحلة اللي بعدها اتفتحت!</b>":"<br>لازم تخلص 60% من الطلبات.");
+  (win?"<br><b>\ud83d\udd25 المرحلة اللي بعدها اتفتحت!</b>":"<br>لازم تخلص 60% من الطلبات.");
  $("nextLevel").style.display=win&&G.n<10?"block":"none";
  $("retry").style.display=win?"none":"block";
  show("endScreen");resize();
@@ -321,11 +321,11 @@ function show(id){
 }
 function updateHud(){
  if(!G)return;
- $("money").innerHTML="💰 <b>"+S.money+"</b>";
- $("level").innerHTML="⭐ ليفل <b>"+G.n+"</b>";
- $("orders").innerHTML="🍔 <b>"+G.served+"/"+G.cfg.orders+"</b>";
+ $("money").innerHTML="\ud83d\udcb0 <b>"+S.money+"</b>";
+ $("level").innerHTML="\u2b50 ليفل <b>"+G.n+"</b>";
+ $("orders").innerHTML="\ud83c\udf54 <b>"+G.served+"/"+G.cfg.orders+"</b>";
  const r=Math.max(0,Math.ceil(G.cfg.time-G.t));
- $("time").innerHTML="⏱️ <b>"+Math.floor(r/60)+":"+String(r%60).padStart(2,"0")+"</b>";
+ $("time").innerHTML="\u23f1\ufe0f <b>"+Math.floor(r/60)+":"+String(r%60).padStart(2,"0")+"</b>";
 }
 function renderLevels(){
  const box=$("levels");box.innerHTML="";
@@ -334,7 +334,7 @@ function renderLevels(){
   const locked=i>S.unlocked;
   b.className="level"+(locked?" lock":"")+(i===S.current?" current":"")+(i<S.unlocked?" done":"");
   b.innerHTML=locked?
-   '<span style="font-size:28px">🔒</span><small>مقفولة</small>':
+   '<span style="font-size:28px">\ud83d\udd12</span><small>مقفولة</small>':
    '<span class="num">'+i+'</span><small>'+LEVEL_INFO[i-1]+'</small><span class="badge">'+levelConfig(i).customers+' زبون</span>';
   if(!locked)b.onclick=()=>startLevel(i);
   box.appendChild(b);
@@ -406,8 +406,14 @@ $("endLevels").onclick=()=>{renderLevels();show("levelsScreen")};
 $("musicBtn").onclick=()=>{S.music=!S.music;save();renderSettings()};
 $("sfxBtn").onclick=()=>{S.sfx=!S.sfx;save();renderSettings()};
 $("themeBtn").onclick=()=>{S.theme=S.theme==="night"?"warm":"night";save()};
+/* المسح بيمسح الإعدادات بس - الليفل والتطويرات والفلوس مبتمسحش */
 $("reset").onclick=()=>{
- if(confirm("متأكد تمسح كل التقدم؟")){S=structuredClone(DEFAULT);save();renderSettings()}
+ if(confirm("هتمسح الإعدادات بس (موسيقى / مؤثرات / شكل المطعم).\nالليفلات والتطويرات والفلوس هتفضل زي ما هي. متأكد؟")){
+  S.music=DEFAULT.music;
+  S.sfx=DEFAULT.sfx;
+  S.theme=DEFAULT.theme;
+  save();renderSettings();
+ }
 };
 $("claimDaily").onclick=()=>{
  if(Date.now()<S.daily.next)return;
@@ -426,7 +432,7 @@ function roundRect(c,x,y,w,h,r,fill,stroke){
  if(stroke){c.strokeStyle=stroke;c.stroke()}
 }
 function ingredientEmoji(k){
- return {baladi:"🫓",fino:"🥖",liver:"🥩",sogo:"🌭",egg:"🥚",onion:"🧅",pepper:"🌶️",tahini:"🥣",pickle:"🥒",potato:"🍟",cheese:"🧀"}[k]||"🍴";
+ return {baladi:"\ud83e\uded3",fino:"\ud83e\udd56",liver:"\ud83e\udd69",sogo:"\ud83c\udf2d",egg:"\ud83e\udd5a",onion:"\ud83e\uddc5",pepper:"\ud83c\udf36\ufe0f",tahini:"\ud83e\udd63",pickle:"\ud83e\udd52",potato:"\ud83c\udf5f",cheese:"\ud83e\uddc0"}[k]||"\ud83c\udf74";
 }
 function drawIngredient(c,k,x,y,r,rot=0){
  c.save();c.translate(x,y);c.rotate(rot);
@@ -499,8 +505,8 @@ function drawRestaurant(){
  // back shelves
  g.fillStyle="#74431f";g.fillRect(30,92,175,120);
  g.fillStyle="#8e582a";g.fillRect(42,105,151,9);g.fillRect(42,150,151,9);
- ["🍅","🧅","🌶️","🥒","🧀"].forEach((e,i)=>{g.font="24px sans-serif";g.fillText(e,57+i*28,142)});
- ["🥣","🍞","🥩"].forEach((e,i)=>{g.fillText(e,65+i*40,190)});
+ ["\ud83c\udf45","\ud83e\uddc5","\ud83c\udf36\ufe0f","\ud83e\udd52","\ud83e\uddc0"].forEach((e,i)=>{g.font="24px sans-serif";g.fillText(e,57+i*28,142)});
+ ["\ud83e\udd63","\ud83c\udf5e","\ud83e\udd69"].forEach((e,i)=>{g.fillText(e,65+i*40,190)});
 
  // floor/counter
  g.fillStyle="#6e3e1d";g.fillRect(0,260,800,190);
@@ -557,7 +563,9 @@ function drawSandwich(){
  }
  s.items.forEach((it,i)=>{
   const a=i*.7;
-  drawIngredient(ctx,it.k,Math.cos(a)*45,Math.sin(a)*10-8,9,it.rot);
+  const px=it.px!==undefined?it.px:Math.cos(a)*45;
+  const py=it.py!==undefined?it.py:Math.sin(a)*10-8;
+  drawIngredient(ctx,it.k,px,py,9,it.rot);
  });
  if(s.folded){
   ctx.fillStyle="#d99e55";ctx.beginPath();ctx.ellipse(0,-14,91,23,0,0,7);ctx.fill();ctx.stroke();
@@ -621,6 +629,16 @@ cv.addEventListener("pointerdown",e=>{
  if(k){
   pointer.kind="ingredient";pointer.data=k;cv.setPointerCapture(e.pointerId);return;
  }
+ if(G){
+  for(let i=0;i<2;i++){
+   const o=G.grill[i];
+   if(o&&Math.hypot(x-(205+i*45),y-302)<28){
+    pointer={x,y,kind:"grill",data:i};
+    cv.setPointerCapture(e.pointerId);
+    return;
+   }
+  }
+ }
  if(G.sandwich&&sandwichHit(x,y)){
   pointer.kind="sandwich";cv.setPointerCapture(e.pointerId);return;
  }
@@ -635,6 +653,7 @@ cv.addEventListener("pointerup",e=>{
  if(!pointer||mode!=="play"){pointer=null;return}
  const [x,y]=worldPos(e);
  if(pointer.kind==="ingredient")dropIngredient(pointer.data,x,y);
+ else if(pointer.kind==="grill")dropGrill(pointer.data,x,y);
  else if(pointer.kind==="sandwich")dropSandwich(x,y);
  pointer=null;
 });
@@ -655,8 +674,8 @@ function dropIngredient(k,x,y){
   if(G.grill.some(o=>o&&o.k===k)){wrongAction("ده بيتشوي بالفعل");return}
   const slot=G.grill.findIndex(o=>!o);
   if(slot<0){wrongAction("الشواية مليانة");return}
-  G.grill[slot]={k,t:0};
-  burst(205+slot*45,300,"🔥");
+  G.grill[slot]={k:k,t:0};
+  burst(205+slot*45,300,"\ud83d\udd25");
   return;
  }
 
@@ -666,9 +685,39 @@ function dropIngredient(k,x,y){
  const customer=G.customers.find(c=>c.active&&c.order.items.includes(k));
  if(!customer){wrongAction("المكون ده مش مطلوب");return}
  if(G.sandwich.items.some(i=>i.k===k)){wrongAction("حطيته قبل كده");return}
- G.sandwich.items.push({k,rot:(Math.random()-.5)*.6});
+ G.sandwich.items.push({k:k,rot:(Math.random()-.5)*.6,px:(G.sandwich.items.length-1.5)*36,py:(Math.random()-.5)*10});
  burst(335,400,ING[k].name);
  G.message="كمّل الطلب وبعدين اطوي الساندوتش";
+}
+
+/* سحب الأكل المستوي من الشواية وحطه جوه العيش */
+function dropGrill(i,x,y){
+ const o=G.grill[i];
+ if(!o)return;
+ // الرمي في الزبالة
+ if(x>480&&x<532&&y>330&&y<385){
+  G.grill[i]=null;burst(x,y,"اترمى");
+  G.message="اسحب أكل تاني على الشواية";
+  return;
+ }
+ if(!G.sandwich){wrongAction("حط العيش الأول");return}
+ if(!sandwichHit(x,y)){wrongAction("حطه جوه الرغيف");return}
+ if(o.t<4){wrongAction("لسه ني! استنى يستوي شوية");return}
+ if(o.t>=8.5){wrongAction("اتحرق! ارميه في الزبالة");return}
+ const customer=G.customers.find(c=>c.active&&c.order.items.includes(o.k));
+ if(!customer){wrongAction("المكون ده مش مطلوب");return}
+ if(G.sandwich.items.some(s=>s.k===o.k)){wrongAction("حطيته قبل كده");return}
+ // الأكل المستوي يتوزّع جوه العيش أو الفينو
+ for(let p=0;p<4;p++)G.sandwich.items.push({
+  k:o.k,
+  rot:(Math.random()-.5)*.7,
+  px:(p-1.5)*36,
+  py:(Math.random()-.5)*10
+ });
+ G.grill[i]=null;
+ G.message="اتوزّع جوه العيش! اكمّل باقي المكونات";
+ burst(335,400,ING[o.k].name);
+ if(S.sfx)beep(700,.08);
 }
 
 function dropSandwich(x,y){
@@ -748,9 +797,15 @@ function update(dt){
  // grill cooking
  G.grill.forEach((o,i)=>{
   if(!o)return;
+  const was=o.t;
   o.t+=dt;
-  if(o.t>8.8){
-   // burnt meat can be discarded, but stays until user handles it
+  if(was<4&&o.t>=4){
+   texts.push({x:205+i*45,y:258,text:"استوت!",life:1.1,color:"#7bff9e"});
+   if(S.sfx)beep(900,.06);
+  }
+  if(was<8.5&&o.t>=8.5){
+   texts.push({x:205+i*45,y:258,text:"اتحرقت!",life:1.1,color:"#ff806d"});
+   if(S.sfx)beep(110,.15);
   }
   if(Math.random()<dt*4)smoke(205+i*45,285);
  });
@@ -819,6 +874,10 @@ function render(){
   const x=pointer.x,y=pointer.y;
   ctx.globalAlpha=.9;
   if(pointer.kind==="ingredient")drawIngredient(ctx,pointer.data,x,y,23,0);
+  else if(pointer.kind==="grill"){
+   const o=G.grill[pointer.data];
+   if(o)drawIngredient(ctx,o.k,x,y,20,0);
+  }
   else if(pointer.kind==="sandwich"){
    ctx.save();ctx.translate(x,y);ctx.scale(1.08,1.08);
    if(G.sandwich)drawSandwichAt(x,y);
@@ -846,7 +905,10 @@ function drawSandwichAt(x,y){
  ctx.save();ctx.translate(x,y);
  ctx.fillStyle="#dba55b";ctx.strokeStyle="#8d5b22";ctx.lineWidth=3;
  ctx.beginPath();ctx.ellipse(0,0,95,27,0,0,7);ctx.fill();ctx.stroke();
- G.sandwich.items.forEach((it,i)=>drawIngredient(ctx,it.k,(i-1)*28,0,10,it.rot));
+ G.sandwich.items.forEach((it,i)=>{
+  const px=it.px!==undefined?it.px:(i-1)*28;
+  drawIngredient(ctx,it.k,px,it.py||0,10,it.rot);
+ });
  ctx.restore();
 }
 
