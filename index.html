@@ -71,7 +71,7 @@ h2{text-shadow:0 2px 0 #7a3f00,0 0 14px rgba(247,168,26,.5);letter-spacing:.01em
 <script>
 const $=i=>document.getElementById(i),pick=a=>a[Math.random()*a.length|0],rnd=(a,b)=>a+(Math.random()*(b-a+1)|0),lp=(a,b,t)=>a+(b-a)*t;
 const lvCfg=n=>({total:4+n*2,iv:Math.max(2.5,8-n*.5),pat:Math.max(22,50-n*2.5),ex:Math.min(3,1+(n>>1)),tl:Math.round((3+n*2)*Math.max(2.5,8-n*.5)+55)});
-const DEF=()=>({ach:{},lv:{},orders:[],daily:{day:0,next:0},vol:60,amode:'game',own:['baladi','liver','onion'],money:0,cur:1,unlocked:1,up:{pat:0,tip:0,tbl:0,exp:0},music:1,sfx:1});
+const DEF=()=>({lv:{},orders:[],daily:{day:0,next:0},vol:60,amode:'game',own:['baladi','liver','onion'],money:0,cur:1,unlocked:1,up:{pat:0,tip:0,tbl:0,exp:0},music:1,sfx:1});
 let S=DEF();try{const j=JSON.parse(localStorage.getItem('moallem1'));if(j)S=Object.assign(DEF(),j,{up:Object.assign(DEF().up,j.up)})}catch(e){}
 const save=()=>{try{localStorage.setItem('moallem1',JSON.stringify(S))}catch(e){}};
 const ING={baladi:['عيش بلدي','b'],fino:['فينو','b'],liver:['كبدة','m'],sogo:['سجق','m'],egg:['بيض','m'],onion:['بصل','x'],pepper:['فلفل','x'],tahini:['طحينة','x'],pickle:['مخلل','x'],potato:['بطاطس','x'],cheese:['جبنة','x']};
@@ -281,4 +281,4 @@ $('lnote').textContent='المرحلة الجاية ليك: '+nx+'  •  عاي�
 function renderUp(){$('um').innerHTML='معاك <b>'+S.money+'</b> جنيه';const u=$('ul');u.innerHTML='';UPS.forEach(([k,n,d,p,mx])=>{const lv=S.up[k],pr=p*(lv+1),cd=document.createElement('div');cd.className='card';cd.innerHTML='<div><b>'+n+'</b><small>'+d+'</small><span class="pips">'+'\u25A0'.repeat(lv)+'\u25A1'.repeat(mx-lv)+'</span></div>';const b=document.createElement('button');b.className='btn sm'+(lv>=mx?'':' g');b.textContent=lv>=mx?'خلاص اتطوّر':'اشتري بـ '+pr+' جنيه';b.onclick=()=>{if(lv>=mx||S.money<pr){sfx('bad');return}S.money-=pr;S.up[k]++;save();sfx('buy');spark(400,200,'#ffd54a',20);renderUp()};cd.append(b);u.append(cd)});
 const hh=document.createElement('h2');hh.textContent='المكونات';u.append(hh);
 Object.keys(PRICE).forEach(k=>{const own=S.own.includes(k),lk=!own&&S.unlocked<UNL[k],cd=document.createElement('div');cd.className='card';const c=document.createElement('canvas');c.width=c.height=44;ic(c.getContext('2d'),k,22,24,18);cd.append(c);const d=document.createElement('div');d.innerHTML='<b>'+ING[k][0]+'</b><small>'+(own?'معاك في المطعم':lk?'يتفتح لما توصل المرحلة '+UNL[k]:'مكون جديد للطلبات')+'</small>';cd.append(d);const b=document.createElement('button');b.className='btn sm'+(own||lk?'':' g');b.textContent=own?'اشتريته':lk?'مقفول':'اشتري بـ '+PRICE[k]+' جنيه';b.onclick=()=>{if(own||lk||S.money<PRICE[k]){sfx('bad');return}S.money-=PRICE[k];S.own.push(k);D.avail=av();save();sfx('buy');spark(400,200,'#ffd54a',20);renderUp()};cd.append(b);u.append(cd)})}
-const renderSet=()=>{$('tm').textContent='الم
+const renderSet=()=>{$('tm').textContent='الموسيقى: 
